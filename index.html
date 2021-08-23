@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+  <head>
+    <title>pae-iot</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  </head>
+  <body>
+      <div class="flex flex-col justify-around h-screen">
+        <p class="font-bold text-6xl text-center filter drop-shadow">
+            IOT
+        </p>
+        <div class="w-80 h-32 self-center">
+            <div id="titulo" class="text-center text-3xl font-bold text-gray-900 filter drop-shadow">
+            </div>
+            <p id="estado" class="text-center pt-8 text-6xl text-gray-900 font-bold filter drop-shadow-lg">
+            </p>
+            <p id="placeholder" class="text-center pt-8 text-gray-500 font-bold">
+            Ingrese en la parte inferior su numero de telefono y luego haga click en "Consultar"
+            </p>
+        </div>
+        <div id="message" class="h-32 text-red-400 text-center text-xl">
+        </div>
+        <div class="flex flex-col pb-48">
+          <input id="phoneNumber" type="text" 
+          class="shadow-lg rounded-lg border w-80 h-12 text-center text-xl
+          p-1 self-center"
+          placeholder="Ingrese numero de telefono">
+          </input>
+          <div
+              onclick="onClick()"
+              class="w-32 mt-6 h-12 rounded-lg shadow-lg self-center bg-blue-500">
+              <p class="text-center text-white text-xl font-bold p-2 align-middle">
+                  Consultar
+              </p>
+          </div>
+        </div>
+      </div>
+  </body>
+  <script>
+      function onClick(){
+          inputValue = document.getElementById("phoneNumber").value.trim()
+          if (inputValue.length > 0) {
+              let url = 'http://35.209.97.193/api/device/' + inputValue +'/state'
+              fetch(url)
+              .then(response => response.json())
+              .then(data => {
+                  document.getElementById("titulo").innerText = "El estado de la luz es:"
+                  document.getElementById("message").innerText = ""
+                  document.getElementById("placeholder").innerText=''
+
+                  let state = ''
+
+                  if (data.LightState === true){
+                      state = 'Encendido'
+                  }
+
+                  if (data.LightState === false){
+                      state = 'Apagado'
+                  }
+
+                  document.getElementById("estado").innerText=state
+                });
+          }else{
+              document.getElementById("message").innerText = "Ingrese un numero valido"
+              document.getElementById("titulo").innerText = ""
+              document.getElementById("placeholder").innerText='Ingrese en la parte inferior su numero de telefono y luego haga click en "Consultar"'
+              document.getElementById("estado").innerText=''
+          }
+      }
+  </script>
+</html>
