@@ -43,6 +43,7 @@
           inputValue = document.getElementById("phoneNumber").value.trim()
           if (inputValue.length > 0) {
               let url = 'http://35.209.97.193/api/device/' + inputValue +'/state'
+
               fetch(url)
               .then(response => response.json())
               .then(data => {
